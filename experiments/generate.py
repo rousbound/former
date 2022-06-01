@@ -134,9 +134,9 @@ def go(arg):
     tbw = SummaryWriter(log_dir=arg.tb_dir) # Tensorboard logging
 
     # load the data (validation unless arg.final is true, then test)
-    arg.data = here('data/enwik8.gz') if arg.data is None else arg.data
+    # arg.data = here('data/enwik8.gz') if arg.data is None else arg.data
 
-    data_train, data_val, data_test = enwik8(arg.data)
+    data_train, data_val, data_test = enwik8("data/portadosfundos_filtered.txt")
     data_train, data_test = (torch.cat([data_train, data_val], dim=0), data_test) \
                             if arg.final else (data_train, data_val)
 
