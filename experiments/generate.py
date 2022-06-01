@@ -8,7 +8,6 @@ from torch import nn
 from torch.autograd import Variable
 import torch.nn.functional as F
 import torch.distributions as dist
-
 import numpy as np
 
 from argparse import ArgumentParser
@@ -18,7 +17,7 @@ import random, tqdm, sys, math, gzip
 
 # NB, the enwik8 data contains tokens from 9 to 240, but well round up to the nearest
 # power of two.
-NUM_TOKENS = 256
+NUM_TOKENS = 30_522
 
 def sample(lnprobs, temperature=1.0):
     """
@@ -37,7 +36,7 @@ def sample(lnprobs, temperature=1.0):
 
     return cd.sample()
 
-def enwik8(path, n_train=int(90e6), n_valid=int(5e6), n_test=int(5e6)):
+def enwik8(path, nbatches):
     """
     Load the enwik8 dataset from the Hutter challenge.
 
@@ -48,9 +47,19 @@ def enwik8(path, n_train=int(90e6), n_valid=int(5e6), n_test=int(5e6)):
     :param n_test:
     :return:
     """
+    n_train = int(nbatches*0.9) 
+    n_valid = int(nbatches*0.05)
+    n_test = int(nbatches*0.05)
     with gzip.open(path) if path.endswith('.gz') else open(path) as file:
-        X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
+        from transformers import RobertaTokenizerFast
+        tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
+        # X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
+        X = tokenizer(file.read(n_train + n_valid + n_test))
         trX, vaX, teX = np.split(X, [n_train, n_train + n_valid])
+        print("trX:",trX)
+        print("vaX:",vaX)
+        print("teX:",teX)
+
         return torch.from_numpy(trX), torch.from_numpy(vaX), torch.from_numpy(teX)
 
 def sample_batch(data, length, batch_size):
@@ -134,9 +143,9 @@ def go(arg):
     tbw = SummaryWriter(log_dir=arg.tb_dir) # Tensorboard logging
 
     # load the data (validation unless arg.final is true, then test)
-    # arg.data = here('data/enwik8.gz') if arg.data is None else arg.data
+    arg.data = here('data/enwik8.gz') if arg.data is None else arg.data
 
-    data_train, data_val, data_test = enwik8("data/portadosfundos_filtered.txt")
+    data_train, data_val, data_test = enwik8("data/portadosfundos_filtered.txt", arg.num_batches)
     data_train, data_test = (torch.cat([data_train, data_val], dim=0), data_test) \
                             if arg.final else (data_train, data_val)
 
@@ -194,6 +203,7 @@ def go(arg):
                 ## Sample and print a random sequence
 
                 # Slice a random seed from the test data, and sample a continuation from the model.
+                print("Data test size:", data_test.size(0))
                 seedfr = random.randint(0, data_test.size(0) - arg.context)
                 seed = data_test[seedfr:seedfr + arg.context].to(torch.long)
 
@@ -306,5 +316,3 @@ if __name__ == "__main__":
     options = parser.parse_args()
 
     print('OPTIONS ', options)
-
-    go(options)
