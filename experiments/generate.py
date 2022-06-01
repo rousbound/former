@@ -54,7 +54,7 @@ def enwik8(path, nbatches):
         from transformers import RobertaTokenizerFast
         tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
         # X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
-        X = tokenizer(file.read(n_train + n_valid + n_test))
+        X = tokenizer(file.read(n_train + n_valid + n_test))['input_ids']
         print(X)
         trX, vaX, teX = np.split(X, [n_train, n_train + n_valid])
         print("trX:",trX)
