@@ -12,12 +12,14 @@ import numpy as np
 
 from argparse import ArgumentParser
 from torch.utils.tensorboard import SummaryWriter
+from transformers import RobertaTokenizerFast
 
 import random, tqdm, sys, math, gzip
 
 # NB, the enwik8 data contains tokens from 9 to 240, but well round up to the nearest
 # power of two.
 NUM_TOKENS = 30_522
+tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
 
 def sample(lnprobs, temperature=1.0):
     """
@@ -49,8 +51,6 @@ def enwik8(path, nbatches):
     """
     print("Ok")
     with gzip.open(path) if path.endswith('.gz') else open(path) as file:
-        from transformers import RobertaTokenizerFast
-        tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
         # X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
         X = tokenizer(file.read())['input_ids']
         print(X)
@@ -129,7 +129,8 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
         c = sample(output[0, -1, :], temperature)
 
         if verbose:
-            print(str(chr(max(32, c))), end='', flush=True)
+            # print(str(chr(max(32, c))), end='', flush=True)
+            print(tokenizer.decode(c))
 
         sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
 
