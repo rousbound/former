@@ -50,6 +50,7 @@ def enwik8(path, nbatches):
     n_train = int(nbatches*0.9) 
     n_valid = int(nbatches*0.05)
     n_test = int(nbatches*0.05)
+    print("Ok")
     with gzip.open(path) if path.endswith('.gz') else open(path) as file:
         from transformers import RobertaTokenizerFast
         tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
@@ -317,3 +318,5 @@ if __name__ == "__main__":
     options = parser.parse_args()
 
     print('OPTIONS ', options)
+
+    go(options)
