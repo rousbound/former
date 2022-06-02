@@ -47,9 +47,6 @@ def enwik8(path, nbatches):
     :param n_test:
     :return:
     """
-    print("trX:",n_train)
-    print("vaX:",n_valid)
-    print("teX:",n_test)
     print("Ok")
     with gzip.open(path) if path.endswith('.gz') else open(path) as file:
         from transformers import RobertaTokenizerFast
