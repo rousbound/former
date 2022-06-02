@@ -137,7 +137,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
 
         sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
 
-    print()
+    # print()
 
     now = datetime.now()
     current_time = now.strftime("%H_%M_%S")
@@ -222,7 +222,7 @@ def go(arg):
                 if torch.cuda.is_available():
                     seed = seed.cuda()
 
-                sample_sequence(model, seed=seed, max_context=arg.context, verbose=True, length=arg.sample_length)
+                sample_sequence(model, seed=seed, max_context=arg.context, verbose=False, length=arg.sample_length)
 
                 ## Compute validation bits per byte
 
