@@ -141,7 +141,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
 
     now = datetime.now()
     current_time = now.strftime("%H_%M_%S")
-    np.savetxt(f'samples/sample_{current_time}.txt', sequence.numpy())
+    np.savetxt(f'samples/sample_{current_time}.txt', sequence.cpu().numpy())
     return seed
 
 def go(arg):
