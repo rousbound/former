@@ -55,7 +55,7 @@ def enwik8(path, nbatches):
         from transformers import RobertaTokenizerFast
         tokenizer = RobertaTokenizerFast.from_pretrained('portificador')
         # X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
-        X = tokenizer(file.read(n_train + n_valid + n_test))['input_ids']
+        X = tokenizer(file.read())['input_ids']
         print(X)
         print(len(X))
         X_len = len(X)
