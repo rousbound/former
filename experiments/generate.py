@@ -114,11 +114,15 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
 
     sequence = seed.detach().clone()
 
-    if verbose: # Print the seed, surrounded by square brackets
-        print('[', end='', flush=True)
-        for c in seed:
-            print(tokenizer.decode(c), end='', flush=True)
-        print(']', end='', flush=True)
+    corpus = ""
+
+    # if verbose: # Print the seed, surrounded by square brackets
+        # # print('[', end='', flush=True)
+    corpus += "["
+    for c in seed:
+        # print(tokenizer.decode(c), end='', flush=True)
+        corpus += tokenizer.decode(c)
+        # print(']', end='', flush=True)
 
     for _ in range(length):
 
@@ -133,7 +137,8 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
 
         if verbose:
             # print(str(chr(max(32, c))), end='', flush=True)
-            print(tokenizer.decode(c), end='', flush=True)
+            # print(tokenizer.decode(c), end='', flush=True)
+        corpus += tokenizer.decode(c)
 
         sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
 
@@ -141,7 +146,9 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
 
     now = datetime.now()
     current_time = now.strftime("%H_%M_%S")
-    np.savetxt(f'samples/sample_{current_time}.txt', sequence.cpu().numpy())
+    # np.savetxt(f'samples/sample_{current_time}.txt', sequence.cpu().numpy())
+    with open(f'samples/sample_{current_time}.txt', "w") as arq:
+        arq.write(corpus)
     return seed
 
 def go(arg):
