@@ -114,7 +114,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
     if verbose: # Print the seed, surrounded by square brackets
         print('[', end='', flush=True)
         for c in seed:
-            print(str(chr(c)), end='', flush=True)
+            print(tokenizer.decode(c), end='', flush=True)
         print(']', end='', flush=True)
 
     for _ in range(length):
