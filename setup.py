@@ -13,6 +13,7 @@ setup(name='former',
             'tqdm',
             'numpy',
             'torchtext',
-            'tensorboard'
+            'tensorboard',
+            'transformers',
       ],
       zip_safe=False)
