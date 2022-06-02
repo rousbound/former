@@ -1,7 +1,10 @@
 import former
 from former import util, GTransformer
+from datetime import datetime
 
 from former.util import d, here, tic, toc
+import numpy as np
+import time
 
 import torch
 from torch import nn
@@ -135,6 +138,10 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
         sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
 
     print()
+
+    now = datetime.now()
+    current_time = now.strftime("%H_%M_%S")
+    np.savetxt(f'samples/sample_{current_time}.txt', sequence.numpy())
     return seed
 
 def go(arg):
