@@ -47,9 +47,6 @@ def enwik8(path, nbatches):
     :param n_test:
     :return:
     """
-    n_train = int(nbatches*0.9) 
-    n_valid = int(nbatches*0.05)
-    n_test = int(nbatches*0.05)
     print("trX:",n_train)
     print("vaX:",n_valid)
     print("teX:",n_test)
@@ -61,6 +58,10 @@ def enwik8(path, nbatches):
         X = tokenizer(file.read(n_train + n_valid + n_test))['input_ids']
         print(X)
         print(len(X))
+        X_len = len(X)
+        n_train = int(X_len*0.9) 
+        n_valid = int(X_len*0.05)
+        n_test = int(X_len*0.05)
         trX, vaX, teX = np.split(X, [n_train, n_train + n_valid])
         print("trX:",trX)
         print("vaX:",vaX)
