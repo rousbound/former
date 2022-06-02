@@ -135,7 +135,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
         # Sample the next token from the probabilitys at the last position of the output.
         c = sample(output[0, -1, :], temperature)
 
-        if verbose:
+        # if verbose:
             # print(str(chr(max(32, c))), end='', flush=True)
             # print(tokenizer.decode(c), end='', flush=True)
         corpus += tokenizer.decode(c)
