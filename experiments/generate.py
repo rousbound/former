@@ -50,6 +50,9 @@ def enwik8(path, nbatches):
     n_train = int(nbatches*0.9) 
     n_valid = int(nbatches*0.05)
     n_test = int(nbatches*0.05)
+        print("trX:",n_train)
+        print("vaX:",n_valid)
+        print("teX:",n_test)
     print("Ok")
     with gzip.open(path) if path.endswith('.gz') else open(path) as file:
         from transformers import RobertaTokenizerFast
@@ -57,6 +60,7 @@ def enwik8(path, nbatches):
         # X = np.fromstring(file.read(n_train + n_valid + n_test), dtype=np.uint8)
         X = tokenizer(file.read(n_train + n_valid + n_test))['input_ids']
         print(X)
+        print(len(X))
         trX, vaX, teX = np.split(X, [n_train, n_train + n_valid])
         print("trX:",trX)
         print("vaX:",vaX)
