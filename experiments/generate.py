@@ -132,7 +132,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
             # print(str(chr(max(32, c))), end='', flush=True)
             print(tokenizer.decode(c), end='', flush=True)
 
-        sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
+        sequence = torch.cat([sequence, c], dim=0) # Append the sampled token to the sequence
 
     print()
     return seed
