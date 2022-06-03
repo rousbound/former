@@ -120,9 +120,8 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
         # # print('[', end='', flush=True)
     corpus += "["
     for c in seed:
-        # print(tokenizer.decode(c), end='', flush=True)
         corpus += tokenizer.decode(c)
-        # print(']', end='', flush=True)
+    corpus += "]"
 
     for _ in range(length):
 
@@ -135,9 +134,6 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
         # Sample the next token from the probabilitys at the last position of the output.
         c = sample(output[0, -1, :], temperature)
 
-        # if verbose:
-            # print(str(chr(max(32, c))), end='', flush=True)
-            # print(tokenizer.decode(c), end='', flush=True)
         corpus += tokenizer.decode(c)
 
         sequence = torch.cat([sequence, c[None]], dim=0) # Append the sampled token to the sequence
@@ -145,8 +141,7 @@ def sample_sequence(model, seed, max_context, length=600, temperature=0.5, verbo
     # print()
 
     now = datetime.now()
-    current_time = now.strftime("%H_%M_%S")
-    # np.savetxt(f'samples/sample_{current_time}.txt', sequence.cpu().numpy())
+    current_time = now.strftime("%d_%m_%Y-%H_%M_%S")
     with open(f'samples/sample_{current_time}.txt', "w") as arq:
         arq.write(corpus)
     return seed
