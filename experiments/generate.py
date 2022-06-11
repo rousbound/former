@@ -63,9 +63,6 @@ def enwik8(path, nbatches):
         n_valid = int(X_len*0.05)
         n_test = int(X_len*0.05)
         trX, vaX, teX = np.split(X, [n_train, n_train + n_valid])
-        print("trX:",trX)
-        print("vaX:",vaX)
-        print("teX:",teX)
 
         return torch.from_numpy(trX), torch.from_numpy(vaX), torch.from_numpy(teX)
 
